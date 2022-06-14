@@ -95,13 +95,6 @@ bool VersionMetadata::tryLockRemovalTID(const TransactionID & tid, const Transac
     bool locked = removal_tid_lock.compare_exchange_strong(expected_removal_lock_value, removal_lock_value);
     if (!locked)
     {
-        if (tid == Tx::PrehistoricTID && expected_removal_lock_value == Tx::PrehistoricTID.getHash())
-        {
-            /// Don't need to lock part for queries without transaction
-            LOG_TEST(log, "Assuming removal_tid is locked by {}, table: {}, part: {}", tid, context.table.getNameForLogs(), context.part_name);
-            return true;
-        }
-
         if (locked_by_id)
             *locked_by_id = expected_removal_lock_value;
         return false;
