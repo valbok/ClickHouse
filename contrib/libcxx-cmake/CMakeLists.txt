@@ -78,6 +78,10 @@ target_compile_options(cxx PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-nostdinc++>)
 # Third party library may have substandard code.
 target_compile_options(cxx PRIVATE -w)
 
+if (THREAD_SAFETY_ANALYSIS)
+    target_compile_definitions(cxx PUBLIC -D_LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS)
+endif()
+
 target_link_libraries(cxx PUBLIC cxxabi)
 
 # For __udivmodti4, __divmodti4.

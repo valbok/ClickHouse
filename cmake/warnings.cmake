@@ -15,11 +15,16 @@ if ((NOT CMAKE_BUILD_TYPE_UC STREQUAL "DEBUG") AND (NOT SANITIZE) AND (NOT CMAKE
     add_warning(frame-larger-than=65536)
 endif ()
 
+option(THREAD_SAFETY_ANALYSIS "Compile with Clang TSA (Thread Safety Analysis)" OFF)
+
 if (COMPILER_CLANG)
     # Add some warnings that are not available even with -Wall -Wextra -Wpedantic.
     # We want to get everything out of the compiler for code quality.
     add_warning(everything)
-
+    if (THREAD_SAFETY_ANALYSIS)
+        add_warning(thread-safety)
+        no_warning(thread-safety-negative)
+    endif()
     add_warning(pedantic)
     no_warning(vla-extension)
     no_warning(zero-length-array)
